@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Contagem Regressiva para Casamento</title>
+    <link rel="shortcut icon" href="https://img.icons8.com/?size=48&id=63253&format=png" type="image/x-icon">
+    <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Jersey+10&display=swap');
+
+        body {
+            font-family: "Jersey 10", sans-serif;
+            text-align: center;
+            padding-top: 50px;
+            background-color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0; 
+            height: 100vh; /* Para permitir centralização vertical */
+            display: flex;
+            justify-content: center; /* Centraliza horizontalmente */
+            align-items: center; /* Centraliza verticalmente */
+            flex-direction: column; /* Mantém a ordem do conteúdo na vertical */
+        
+        }
+        #countdown {
+            font-size: 6em;
+            color: #cd4343;
+        }
+
+        @media screen and (max-width: 600px) {
+            body {
+                padding-top: 20px; /* Reduz o espaço superior em dispositivos móveis */
+            }
+            h1 {
+                font-size: 1.5em; /* Reduz o tamanho do título */
+            }
+            #countdown {
+                font-size: 2em; /* Ajusta o tamanho da fonte da contagem regressiva */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="countdown">Espere um pouco...</div>
+
+    <script>
+        // Define a data de destino
+        var targetDate = new Date("August 7, 2024 00:00:00").getTime();
+
+        // Atualiza a contagem regressiva a cada segundo
+        var countdown = setInterval(function() {
+            var now = new Date().getTime();
+            var distance = targetDate - now;
+
+            // Cálculo para dias, horas, minutos e segundos restantes
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Exibe o resultado no elemento com ID "countdown"
+            contagem = document.getElementById("countdown").innerHTML = `${days} dias
+            ${hours} horas 
+            ${minutes} minutos 
+            ${seconds} segundos`;
+
+            if (distance < 0) {
+                clearInterval(countdown);
+                document.getElementById("countdown").innerHTML = "A data chegou!";
+            }
+        }, 1000);
+    </script>
+</body>
