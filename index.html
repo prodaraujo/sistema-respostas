@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema Gerador de Respostas</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f2f5;
+      color: #333;
+    }
+
+    header {
+      background-color: #0277bd;
+      color: white;
+      text-align: center;
+      padding: 1.5rem 0;
+      font-size: 1.5rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #0277bd;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    button {
+      display: inline-block;
+      background-color: #0277bd;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    button:hover {
+      background-color: #01579b;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .menu {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .menu button {
+      flex: 1;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    table th, table td {
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+
+    table th {
+      background-color: #e1f5fe;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Sistema Gerador de Respostas
+  </header>
+  <div class="container">
+    <div id="login-section">
+      <h2>Login</h2>
+      <div class="form-group">
+        <label for="username">Usuário:</label>
+        <input type="text" id="username" placeholder="Digite seu usuário">
+      </div>
+      <div class="form-group">
+        <label for="password">Senha:</label>
+        <input type="password" id="password" placeholder="Digite sua senha">
+      </div>
+      <button onclick="login()">Entrar</button>
+    </div>
+
+    <div id="admin-section" class="hidden">
+      <div class="menu">
+        <button onclick="showSection('view-responses')">Respostas Salvas</button>
+        <button onclick="showSection('new-response')">Nova Resposta</button>
+        <button onclick="showSection('edit-response')">Editar Resposta</button>
+        <button onclick="showSection('remove-response')">Remover Resposta</button>
+        <button onclick="showSection('add-user')">Adicionar Usuário</button>
+      </div>
+
+      <div id="view-responses" class="hidden">
+        <h2>Respostas Salvas</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Texto</th>
+            </tr>
+          </thead>
+          <tbody id="response-table">
+            <!-- Respostas dinamicamente adicionadas aqui -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="new-response" class="hidden">
+        <h2>Nova Resposta</h2>
+        <div class="form-group">
+          <label for="new-response-text">Texto da Resposta:</label>
+          <textarea id="new-response-text" placeholder="Digite o texto da resposta"></textarea>
+        </div>
+        <button onclick="addResponse()">Adicionar Resposta</button>
+      </div>
+
+      <div id="edit-response" class="hidden">
+        <h2>Editar Resposta</h2>
+        <p>Em desenvolvimento...</p>
+      </div>
+
+      <div id="remove-response" class="hidden">
+        <h2>Remover Resposta</h2>
+        <p>Em desenvolvimento...</p>
+      </div>
+
+      <div id="add-user" class="hidden">
+        <h2>Adicionar Usuário</h2>
+        <div class="form-group">
+          <label for="new-username">Nome de Usuário:</label>
+          <input type="text" id="new-username" placeholder="Digite o nome do usuário">
+        </div>
+        <div class="form-group">
+          <label for="new-password">Senha:</label>
+          <input type="password" id="new-password" placeholder="Digite a senha">
+        </div>
+        <button onclick="addUser()">Adicionar Usuário</button>
+      </div>
+    </div>
+
+    <div id="user-section" class="hidden">
+      <h2>Preencher Resposta</h2>
+      <p>Em desenvolvimento...</p>
+    </div>
+  </div>
+
+  <script>
+    const users = [
+      { username: 'admin', password: 'admin', role: 'admin' },
+      { username: 'user', password: 'user', role: 'user' }
+    ];
+    const responses = [];
+
+    function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const user = users.find(u => u.username === username && u.password === password);
+
+      if (user) {
+        document.getElementById('login-section').classList.add('hidden');
+        if (user.role === 'admin') {
+          document.getElementById('admin-section').classList.remove('hidden');
+        } else {
+          document.getElementById('user-section').classList.remove('hidden');
+        }
+      } else {
+        alert('Usuário ou senha inválidos!');
+      }
+    }
+
+    function showSection(sectionId) {
+      const sections = document.querySelectorAll('#admin-section > div');
+      sections.forEach(sec => sec.classList.add('hidden'));
+      document.getElementById(sectionId).classList.remove('hidden');
+    }
+
+    function addResponse() {
+      const responseText = document.getElementById('new-response-text').value;
+      if (responseText.trim() === '') {
+        alert('O texto da resposta não pode estar vazio.');
+        return;
+      }
+      responses.push({ id: responses.length + 1, text: responseText });
+      document.getElementById('new-response-text').value = '';
+      updateResponseTable();
+      alert('Resposta adicionada com sucesso!');
+    }
+
+    function updateResponseTable() {
+      const table = document.getElementById('response-table');
+      table.innerHTML = responses
+        .map(response => `<tr><td>${response.id}</td><td>${response.text}</td></tr>`)
+        .join('');
+    }
+
+    function addUser() {
+      const username = document.getElementById('new-username').value;
+      const password = document.getElementById('new-password').value;
+      if (username.trim() === '' || password.trim() === '') {
+        alert('Usuário e senha não podem estar vazios.');
+        return;
+      }
+      users.push({ username, password, role: 'user' });
+      document.getElementById('new-username').value = '';
+      document.getElementById('new-password').value = '';
+      alert('Usuário adicionado com sucesso!');
+    }
+  </script>
+</body>
+</html>
